@@ -1,13 +1,14 @@
 class GoodsItem {
 
-    constructor(title, price, image) {
+    constructor(id, title, price, image) {
+        this.id = id;
         this.title = title;
         this.price = price;
         this.image = image;
     }
 
     render() {
-        return `<div class="goods-item"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button>Купить</button></div>`;
+        return `<div class="goods-item" data-id="${this.id}"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button class="item-button">Добавить в корзину</button></div>`;
     }
 
 }
@@ -21,23 +22,23 @@ class GoodsList {
 
     fetchGoods() {
         this.goods = [
-            { title: 'Shirt', price: 111, image: 'img/1.jpg' },
-            { title: 'Socks', price: 222, image: 'img/2.jpg' },
-            { title: 'Jacket', price: 333, image: 'img/3.jpg' },
-            { title: 'Shoes', price: 444, image: 'img/4.jpg' },
-            { title: 'Shirt', price: 555, image: 'img/5.jpg' },
-            { title: 'Socks', price: 656, image: 'img/6.jpg' },
-            { title: 'Jacket', price: 777, image: 'img/7.jpg' },
-            { title: 'Shoes', price: 888, image: 'img/8.jpg' },
-            { title: 'Shirt', price: 999, image: 'img/9.jpg' },
-            { title: 'Socks', price: 550, image: 'img/10.jpg' },
+            { id: 1, title: 'Shirt', price: 111, image: 'img/1.jpg' },
+            { id: 2, title: 'Socks', price: 222, image: 'img/2.jpg' },
+            { id: 3, title: 'Jacket', price: 333, image: 'img/3.jpg' },
+            { id: 4, title: 'Shoes', price: 444, image: 'img/4.jpg' },
+            { id: 5, title: 'Shirt', price: 555, image: 'img/5.jpg' },
+            { id: 6, title: 'Socks', price: 656, image: 'img/6.jpg' },
+            { id: 7, title: 'Jacket', price: 777, image: 'img/7.jpg' },
+            { id: 8, title: 'Shoes', price: 888, image: 'img/8.jpg' },
+            { id: 9, title: 'Shirt', price: 999, image: 'img/9.jpg' },
+            { id: 10, title: 'Socks', price: 550, image: 'img/10.jpg' },
         ];
     }
 
     render() {
         let listHtml = '';
         this.goods.forEach(good => {
-            const goodItem = new GoodsItem(good.title, good.price, good.image);
+            const goodItem = new GoodsItem(good.id, good.title, good.price, good.image);
             listHtml += goodItem.render();
         });
         document.querySelector('.goods-list').innerHTML = listHtml;
@@ -55,96 +56,46 @@ class GoodsList {
         return totalPrice;
     }
 
-}
-
-class GoodsBasket {
-
-    addItem () {}
-    removeItem () {}
-    totalPrice () {}
-    makeOrder () {}
-
-}
-
-class BasketItem {
-
-}
-
-class Hamburger {
-
-    static allToppings = [
-        {type: 'salt', price: 15, calories: 0},
-        {type: 'sauce', price: 20, calories: 5},
-    ];
-
-    static allTypes = [
-        {size: 'Small', price: 50, calories: 20},
-        {size: 'Big', price: 100, calories: 40},
-    ];
-
-    static allStuffs = [
-        {type: 'cheeze', price: 10, calories: 20},
-        {type: 'salad', price: 20, calories: 5},
-        {type: 'portato', price: 15, calories: 10},
-    ];
-
-    constructor(size, stuffing) {
-        this.size = size;
-        this.stuffing = stuffing;
-        this.topping = [];
+    getItemById (id) {
+        this.goods.forEach(item => {
+            if(item['id'] == id){
+                return { ... item};
+            }
+        });
     }
 
-    addTopping(topping) {
-            this.topping.push(topping);
+}
+
+class Basket {
+
+    constructor() {
+        this.goods = [];
     }
 
-    removeTopping(topping) {
-        this.topping.forEach(item => {
-            if(item['type'] == topping['type']){
-                const index = this.topping.indexOf(item);
+    addItem (item) {
+        this.goods.push(item);
+    }
+
+    removeItem (id) {
+        this.goods.forEach(item => {
+            if(item == id){
+                const index = this.goods.indexOf(item);
                 if (index > -1) {
-                    this.topping.splice(index, 1);
-
+                    this.goods.splice(index, 1);
                 }
             }
         });
     }
 
-    getToppings(topping) {
-        return this.topping;
-    }
-
-    getSize() {
-        return this.size;
-    }
-
-    getStuffing() {
-        return this.stuffing;
-    }
-
-    calculatePrice() {
-        let price = 0;
-        price = this.size['price'] + this.stuffing['price'];
-        if(this.hasOwnProperty('topping')){
-            this.topping.forEach(item => {
-                price += item['price'];
+    getItemsList () {
+        if(this.hasOwnProperty('goods')){
+            this.goods.forEach(item => {
+                console.log('Item id = ', item);
             });
         }
-        return price;
     }
 
-    calculateCalories() {
-        let calories = 0;
-        calories = this.size['calories'] + this.stuffing['calories'];
-        if(this.hasOwnProperty('topping')) {
-            this.topping.forEach(item => {
-                calories += item['calories'];
-            });
-        }
-        return calories;
-    }
 }
-
 
 const init = () => {
 
@@ -153,20 +104,20 @@ const init = () => {
     list.render();
     console.log('Общая стоимость всех товаров: ' + list.totalPrice());
 
-    firstHamburger = new Hamburger(Hamburger.allTypes[0], Hamburger.allStuffs[0]);
-    secondHamburger = new Hamburger(Hamburger.allTypes[1], Hamburger.allStuffs[2]);
-    console.log('First hamburger price whithout toppings = ' + firstHamburger.calculatePrice() + ', calories ' + firstHamburger.calculateCalories());
-    console.log('Second hamburger price whithout toppings = ' + secondHamburger.calculatePrice() + ', calories ' + secondHamburger.calculateCalories());
+    let basket = new Basket();
 
-    firstHamburger.addTopping(Hamburger.allToppings[0]);
-    secondHamburger.addTopping(Hamburger.allToppings[1]);
-    console.log('First hamburger price whith toppings = ' + firstHamburger.calculatePrice() + ', calories ' + firstHamburger.calculateCalories());
-    console.log('Second hamburger price whith toppings = ' + secondHamburger.calculatePrice() + ', calories ' + secondHamburger.calculateCalories());
+    let buttons = document.querySelectorAll('.item-button');
 
-    secondHamburger.removeTopping(Hamburger.allToppings[1]);
-    console.log('Second hamburger price whithout toppings = ' + secondHamburger.calculatePrice() + ', calories ' + secondHamburger.calculateCalories());
-
-
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            let id = button.closest('div').getAttribute('data-id');
+            basket.addItem(id);
+            basket.getItemsList();
+        });
+    });
 }
 
 window.onload = init
+
+
+
