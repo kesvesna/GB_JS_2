@@ -10,8 +10,23 @@ class GoodsItem {
     render() {
         return `<div class="goods-item" data-id="${this.id}"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button class="item-button">Добавить в корзину</button></div>`;
     }
-
 }
+
+class BasketItem {
+
+    constructor(id, title, price, image) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.image = image;
+    }
+
+    render() {
+        return `<div class="basket-item" data-id="${this.id}"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button class="item-delete-button">Удалить из корзины</button></div>`;
+    }
+}
+
+
 
 
 class GoodsList {
@@ -52,18 +67,18 @@ class GoodsList {
 
             totalPrice += good.price;
         });
-
         return totalPrice;
     }
 
     getItemById (id) {
+        let basket_item = null;
         this.goods.forEach(item => {
             if(item['id'] == id){
-                return { ... item};
+                basket_item = item;
             }
         });
+        return basket_item;
     }
-
 }
 
 class Basket {
@@ -78,8 +93,8 @@ class Basket {
 
     removeItem (id) {
         this.goods.forEach(item => {
-            if(item == id){
-                const index = this.goods.indexOf(item);
+            if(item['id'] == id){
+                const index = this.goods.indexOf(item['id']);
                 if (index > -1) {
                     this.goods.splice(index, 1);
                 }
@@ -95,6 +110,22 @@ class Basket {
         }
     }
 
+    render() {
+        let listHtml = '';
+        this.goods.forEach(good => {
+            const goodItem = new BasketItem(good.id, good.title, good.price, good.image);
+            listHtml += goodItem.render();
+        });
+        document.querySelector('.basket').innerHTML = listHtml;
+    }
+
+    countRender (){
+        let counter = null;
+        this.goods.forEach(good => {
+            counter++;
+        });
+        document.querySelector('#basket-items-counter').innerHTML = 'Товаров в корзине ' + counter + 'шт.';
+    }
 }
 
 const init = () => {
@@ -107,17 +138,30 @@ const init = () => {
     let basket = new Basket();
 
     let buttons = document.querySelectorAll('.item-button');
+    let deleteButtons = null;
 
     buttons.forEach(button => {
         button.addEventListener('click', () => {
             let id = button.closest('div').getAttribute('data-id');
-            basket.addItem(id);
-            basket.getItemsList();
+            let item = list.getItemById(id);
+            basket.addItem(item);
+            basket.render();
+            basket.countRender();
+            deleteButtons = document.querySelectorAll('.item-delete-button');
         });
     });
+
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            alert('clicked');
+            let id = button.closest('div').getAttribute('data-id');
+            basket.removeItem(id);
+            basket.render();
+            basket.countRender();
+        });
+    });
+
+
 }
 
 window.onload = init
-
-
-

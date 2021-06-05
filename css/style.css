@@ -18,7 +18,24 @@ body {
     flex-wrap: wrap;
 }
 
+.basket {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
 .goods-item {
+    flex: 15%;
+    border: 1px solid wheat;
+    width: 150px;
+    box-sizing: border-box;
+    padding: 10px 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.basket-item {
     flex: 15%;
     border: 1px solid wheat;
     width: 150px;
