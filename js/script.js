@@ -94,7 +94,7 @@ class Basket {
     removeItem (id) {
         this.goods.forEach(item => {
             if(item['id'] == id){
-                const index = this.goods.indexOf(item['id']);
+                const index = this.goods.indexOf(item);
                 if (index > -1) {
                     this.goods.splice(index, 1);
                 }
@@ -148,18 +148,19 @@ const init = () => {
             basket.render();
             basket.countRender();
             deleteButtons = document.querySelectorAll('.item-delete-button');
+            deleteButtons.forEach(deleteButton => {
+                deleteButton.addEventListener('click', () => {
+                    let id = deleteButton.closest('div').getAttribute('data-id');
+                    basket.removeItem(id);
+                    basket.render();
+                    basket.countRender();
+                });
+            });
+
         });
     });
 
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            alert('clicked');
-            let id = button.closest('div').getAttribute('data-id');
-            basket.removeItem(id);
-            basket.render();
-            basket.countRender();
-        });
-    });
+
 
 
 }
