@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>eShop</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script src="js/script.js"></script>
+</head>
+<body>
+<header>
+    <input type="text" class="goods-search" />
+    <button class="search-button" type="button">Искать</button>
+    <button class="cart-button" type="button">Корзина</button>
+</header>
+    <main class="content__centering">
+<!--        <button class="cart-button" type="button">Корзина</button>-->
+        <div class="goods-list"></div>
+        <hr>
+        <h1>Корзина</h1>
+        <h2 id="basket-items-counter"></h2>
+        <div class="basket"></div>
+        <br>
+        <hr>
+        <br>
+        <p>Замена кавычек</p>
+        <p>До замены</p>
+        <p id="beforeChange"></p>
+        <br>
+        <p>После замены</p>
+        <p id="afterChange"></p>
+        <br>
+        <p>Обратная связь</p>
+        <br>
+        <form id="message-form">
+            <input type="text" id="name" name="user_name" placeholder="Введите имя">
+            <span class="name-error-message"></span>
+            <br>
+            <input type="phone" id="phone" name="user_phone" placeholder="Введите телефон">
+            <span class="phone-error-message"></span>
+            <br>
+            <input type="email" id="mail" name="user_mail" placeholder="Email">
+            <span class="email-error-message"></span>
+            <br>
+            <textarea id="msg" name="user_message" placeholder="Сообщение"></textarea>
+            <span class="msg-error-message"></span>
+            <br>
+        </form>
+        <button id="submit-button">Отправить</button>
+        <br><br>
+    </main>
+</body>
+</html>
