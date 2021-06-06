@@ -1,33 +1,31 @@
 class GoodsItem {
 
-    constructor(id, title, price, image) {
-        this.id = id;
-        this.title = title;
+    constructor(id_product, product_name, price, image) {
+        this.id_product = id_product;
+        this.product_name = product_name;
         this.price = price;
-        this.image = image;
     }
 
     render() {
-        return `<div class="goods-item" data-id="${this.id}"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button class="item-button">Добавить в корзину</button></div>`;
+        return `<div class="goods-item" data-id="${this.id_product}"><h3>${this.product_name}</h3><p>Price: ${this.price}$</p><button class="item-button">Добавить в корзину</button></div>`;
     }
 }
 
 class BasketItem {
 
-    constructor(id, title, price, image) {
-        this.id = id;
-        this.title = title;
+    constructor(id_product, product_name, price) {
+        this.id_product = id_product;
+        this.product_name = product_name;
         this.price = price;
-        this.image = image;
     }
 
     render() {
-        return `<div class="basket-item" data-id="${this.id}"><h3>${this.title}</h3><img class="img" src="${this.image}" alt="picture"><p>Price: ${this.price}$</p><button class="item-delete-button">Удалить из корзины</button></div>`;
+        return `<div class="basket-item" data-id="${this.id_product}"><h3>${this.product_name}</h3><p>Price: ${this.price}$</p><button class="item-delete-button">Удалить из корзины</button></div>`;
     }
 }
 
 
-
+const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses';
 
 class GoodsList {
 
@@ -35,25 +33,20 @@ class GoodsList {
         this.goods = [];
     }
 
-    fetchGoods() {
-        this.goods = [
-            { id: 1, title: 'Shirt', price: 111, image: 'img/1.jpg' },
-            { id: 2, title: 'Socks', price: 222, image: 'img/2.jpg' },
-            { id: 3, title: 'Jacket', price: 333, image: 'img/3.jpg' },
-            { id: 4, title: 'Shoes', price: 444, image: 'img/4.jpg' },
-            { id: 5, title: 'Shirt', price: 555, image: 'img/5.jpg' },
-            { id: 6, title: 'Socks', price: 656, image: 'img/6.jpg' },
-            { id: 7, title: 'Jacket', price: 777, image: 'img/7.jpg' },
-            { id: 8, title: 'Shoes', price: 888, image: 'img/8.jpg' },
-            { id: 9, title: 'Shirt', price: 999, image: 'img/9.jpg' },
-            { id: 10, title: 'Socks', price: 550, image: 'img/10.jpg' },
-        ];
+    async fetchGoods() {
+        const responce = await fetch(`${API_URL}/catalogData.json`);
+        if (responce.ok) {
+            const catalogItems = await responce.json();
+            this.goods = catalogItems;
+        } else {
+            alert("Ошибка при соединении с сервером");
+        }
     }
 
     render() {
         let listHtml = '';
         this.goods.forEach(good => {
-            const goodItem = new GoodsItem(good.id, good.title, good.price, good.image);
+            const goodItem = new GoodsItem(good.id_product, good.product_name, good.price);
             listHtml += goodItem.render();
         });
         document.querySelector('.goods-list').innerHTML = listHtml;
@@ -73,7 +66,7 @@ class GoodsList {
     getItemById (id) {
         let basket_item = null;
         this.goods.forEach(item => {
-            if(item['id'] == id){
+            if(item['id_product'] == id){
                 basket_item = item;
             }
         });
@@ -93,7 +86,7 @@ class Basket {
 
     removeItem (id) {
         this.goods.forEach(item => {
-            if(item['id'] == id){
+            if(item['id_product'] == id){
                 const index = this.goods.indexOf(item);
                 if (index > -1) {
                     this.goods.splice(index, 1);
@@ -113,7 +106,7 @@ class Basket {
     render() {
         let listHtml = '';
         this.goods.forEach(good => {
-            const goodItem = new BasketItem(good.id, good.title, good.price, good.image);
+            const goodItem = new BasketItem(good.id_product, good.product_name, good.price);
             listHtml += goodItem.render();
         });
         document.querySelector('.basket').innerHTML = listHtml;
@@ -128,10 +121,10 @@ class Basket {
     }
 }
 
-const init = () => {
 
+const init = async () => {
     const list = new GoodsList();
-    list.fetchGoods();
+    await list.fetchGoods();
     list.render();
     console.log('Общая стоимость всех товаров: ' + list.totalPrice());
 
@@ -159,10 +152,7 @@ const init = () => {
 
         });
     });
+};
 
-
-
-
-}
 
 window.onload = init
