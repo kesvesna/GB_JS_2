@@ -1,6 +1,14 @@
+
+var a = "[{ 'As shown above, the 'aesthetic' impact annihi'lates 'the' lyrical mythop'oetic chronotope.' " +
+    " 'The dialogue context firmly 'enlightens' the lyric'al trochee.' " +
+    " 'Developing 'this' theme, the dialogical conte'xt perfectly disco'rds the 'urban' dimension.' }]";
+//var b = a.replace(/\'/g, "\"");
+var b = a.replace(/^'|(\s)'|'(\s)|'$/g, '$1"$2');
+
+
 class GoodsItem {
 
-    constructor(id_product, product_name, price, image) {
+    constructor(id_product, product_name, price) {
         this.id_product = id_product;
         this.product_name = product_name;
         this.price = price;
@@ -30,14 +38,14 @@ const API_URL = 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-sto
 class GoodsList {
 
     constructor() {
-        this.goods = [];
+        this.filteredGoods = [];
     }
 
     async fetchGoods() {
         const responce = await fetch(`${API_URL}/catalogData.json`);
         if (responce.ok) {
             const catalogItems = await responce.json();
-            this.goods = catalogItems;
+            this.filteredGoods = catalogItems;
         } else {
             alert("Ошибка при соединении с сервером");
         }
@@ -45,18 +53,30 @@ class GoodsList {
 
     render() {
         let listHtml = '';
-        this.goods.forEach(good => {
+        this.filteredGoods.forEach(good => {
             const goodItem = new GoodsItem(good.id_product, good.product_name, good.price);
             listHtml += goodItem.render();
         });
         document.querySelector('.goods-list').innerHTML = listHtml;
     }
 
+    async filterGoods(value) {
+        if(value != ''){
+            const regexp = new RegExp(value, 'i');
+            this.filteredGoods = this.filteredGoods.filter(good => regexp.test(good.product_name));
+            this.render();
+        } else {
+            await this.fetchGoods();
+            this.render();
+        }
+
+    }
+
     totalPrice () {
 
         let totalPrice = 0;
 
-        this.goods.forEach(good => {
+        this.filteredGoods.forEach(good => {
 
             totalPrice += good.price;
         });
@@ -72,6 +92,7 @@ class GoodsList {
         });
         return basket_item;
     }
+
 }
 
 class Basket {
@@ -152,6 +173,87 @@ const init = async () => {
 
         });
     });
+
+    let beforeChange = document.querySelector('#beforeChange');
+    beforeChange.innerHTML = a;
+    let afterChange = document.querySelector('#afterChange');
+    afterChange.innerHTML = b;
+
+    let searchButton = document.querySelector('.search-button');
+    let searchInput = document.querySelector('.goods-search');
+    searchButton.addEventListener('click', (e) => {
+        const value = searchInput.value;
+        list.filterGoods(value);
+    });
+
+
+    let submitBtn = document.querySelector('#submit-button');
+    submitBtn.addEventListener('click', (e) => {
+
+        let userName = document.querySelector('#name');
+        let userPhone = document.querySelector('#phone');
+        let userMail = document.querySelector('#mail');
+        let userMsg = document.querySelector('#msg');
+
+        let nameError = document.querySelector('.name-error-message');
+        let phoneError = document.querySelector('.phone-error-message');
+        let emailError = document.querySelector('.email-error-message');
+        let msgError = document.querySelector('.msg-error-message');
+
+        let phoneNumber = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+        let emailString = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        if(userName.value === ''){
+            userName.classList.add('message-error');
+            userName.classList.remove('message-success');
+            nameError.innerHTML = 'Необходимо заполнить имя';
+        } else {
+            userName.classList.remove('message-error');
+            userName.classList.add('message-success');
+            nameError.innerHTML = '';
+        }
+
+        if(userMsg.value === ''){
+            userMsg.classList.add('message-error');
+            userMsg.classList.remove('message-success');
+            msgError.innerHTML = 'Необходимо заполнить сообщение';
+        } else {
+            userMsg.classList.remove('message-error');
+            userMsg.classList.add('message-success');
+            msgError.innerHTML = '';
+        }
+
+        if(userPhone.value === ''){
+            userPhone.classList.add('message-error');
+            userPhone.classList.remove('message-success');
+            phoneError.innerHTML = 'Необходимо заполнить телефон';
+        } else if (!userPhone.value.match(phoneNumber)) {
+            userPhone.classList.add('message-error');
+            userPhone.classList.remove('message-success');
+            phoneError.innerHTML = 'Необходимо правильно заполнить номер телефона';
+        } else {
+            userPhone.classList.remove('message-error');
+            userPhone.classList.add('message-success');
+            phoneError.innerHTML = '';
+        }
+
+        if(userMail.value === ''){
+            userMail.classList.add('message-error');
+            userMail.classList.remove('message-success');
+            emailError.innerHTML = 'Необходимо заполнить email';
+        } else if (!userMail.value.match(emailString)) {
+            userMail.classList.add('message-error');
+            userMail.classList.remove('message-success');
+            emailError.innerHTML = 'Необходимо правильно заполнить email';
+        } else {
+            userMail.classList.remove('message-error');
+            userMail.classList.add('message-success');
+            emailError.innerHTML = '';
+        }
+
+    });
+
+
 };
 
 

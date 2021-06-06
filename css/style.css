@@ -56,3 +56,23 @@ body {
     height: 120px;
 }
 
+#message-form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 25%;
+}
+
+.message-error {
+    outline: 3px solid red;
+}
+
+.message-success {
+    outline: 3px solid green;
+}
+
+span {
+    font-size: 14px;
+    color: red;
+}
+
