@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <title>eShop</title>
+    <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+<div id="app">
+    <header>
+        <input type="text" class="goods-search" v-model="searchLine"/>
+        <button class="search-button" type="button" @click="searchBtnClick">Искать</button>
+<!--        <button class="cart-button" type="button">Корзина</button>-->
+    </header>
+    <main>
+
+        <div class="goods-list">
+            <div class="goods-item" v-for="good in goods">
+                <h3>{{good.product_name}}</h3>
+                <p>{{good.price}}</p>
+                <button class="cart-button" @click="cartBtnClick" :data-id="good.id_product" :data-price="good.price" :data-product-name="good.product_name">Купить</button>
+            </div>
+        </div>
+        <div class="goods-list2" v-if="goods.length <= 0">
+            <h1>Нет данных</h1>
+        </div>
+
+        <div v-if="searchBtnClicked && filteredGoods.length <= 0">
+            <p><br></p>
+            <h1>Ничего не найдено</h1>
+        </div>
+        <div class="search-result" v-if="filteredGoods.length > 0">
+            <p><br></p>
+            <h1>Найдено: </h1>
+            <p><br></p>
+        <div class="search-list">
+            <div class="search-item" v-for="good in filteredGoods">
+                <h3>{{good.product_name}}</h3>
+                <p>{{good.price}}</p>
+                <button class="cart-button" @click="cartBtnClick" :data-id="good.id_product" :data-price="good.price" :data-product-name="good.product_name">Купить</button>
+            </div>
+        </div>
+
+        </div>
+        <div v-if="!isVisibleCart">
+            <p><br></p>
+            <h1>В корзине ничего нет</h1>
+            <p><br></p>
+        </div>
+        <div class="basket-result" v-if="isVisibleCart">
+            <p><br></p>
+            <h1>В корзине: </h1>
+            <p><br></p>
+            <div class="basket-list">
+                <div class="basket-item" v-for="good in cartGoods">
+                    <h3>{{good.product_name}}</h3>
+                    <p>{{good.price}}</p>
+                    <button class="cart-button" @click="deleteBtnClick" :data-id="good.id_product" :data-price="good.price" :data-product-name="good.product_name">Удалить</button>
+                </div>
+            </div>
+
+    </main>
+</div>
+</body>
+<script defer src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<script defer src="js/script.js"></script>
+</html>
