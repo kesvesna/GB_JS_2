@@ -18,7 +18,7 @@ body {
     flex-wrap: wrap;
 }
 
-.basket {
+.basket-list, .search-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -35,7 +35,7 @@ body {
     text-align: center;
 }
 
-.basket-item {
+.basket-item, .search-item {
     flex: 15%;
     border: 1px solid wheat;
     width: 150px;
