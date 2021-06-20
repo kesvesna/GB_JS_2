@@ -1,4 +1,6 @@
 
+const { axios } = require('axios')
+
 Vue.component ('app-search',{
   template:
     `<div class="card">
@@ -20,14 +22,15 @@ v-model.trim="searchValue"
 </div>
     `,
   data: () => ({
-    url: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
+    url: 'http://localhost:3000',
     title: 'Поиск',
     searchValue: '',
     searchResult: [],
     searchInfo: '',
-    goods: []
+    goods: [],
+    cartGoods: []
   }),
-  inject: ['cartGoods'],
+  //inject: ['cartGoods'],
   methods: {
     submitHandler: function () {
       const searchString = this.searchValue.toLowerCase()
@@ -72,7 +75,7 @@ v-model.trim="searchValue"
     },
     async fetchGoods()
     {
-      const responce = await fetch(`${this.url}/catalogData.json`);
+      const responce = await fetch(`${this.url}/catalogData`);
       if (responce.ok) {
         const catalogItems = await responce.json();
         this.goods = catalogItems;
@@ -83,6 +86,7 @@ v-model.trim="searchValue"
   }
 })
 
+//=============================================================
 
 Vue.component ('app-basket', {
   template:
@@ -99,9 +103,14 @@ Vue.component ('app-basket', {
     `
   ,
   data: () => ({
-    title: 'Корзина'
+    url: 'http://localhost:3000',
+    title: 'Корзина',
+    cartGoods: []
   }),
-  inject: ['cartGoods'],
+  //inject: ['cartGoods'],
+  created () {
+    this.fetchCartGoods().then(() => {}).catch(()=>{console.log('Error connection')})
+  },
   methods: {
     removeFromCart: function (key) {
       for (let i = 0; i < this.cartGoods.length; i++) {
@@ -126,10 +135,21 @@ Vue.component ('app-basket', {
           this.cartGoods[i].value += 1
         }
       }
+    },
+    async fetchCartGoods()
+    {
+      const responce = await fetch(`${this.url}/cartData`);
+      if (responce.ok) {
+        const catalogItems = await responce.json();
+        this.cartGoods = catalogItems;
+      } else {
+        console.log("Ошибка при соединении с сервером");
+      }
     }
   }
 });
 
+//===========================================================
 
 Vue.component('app-main', {
   template:
@@ -143,53 +163,40 @@ Vue.component('app-main', {
       </div>
   </div>
     <app-search></app-search>
-    <app-basket :cart-goods="cartGoods"></app-basket>
+    <app-basket></app-basket>
   </div>`
   ,
   data: () => ({
-    url: 'https://raw.githubusercontent.com/GeekBrainsTutorial/online-store-api/master/responses',
+    url: 'http://localhost:3000',
     title: 'Товары',
     goods:  [],
-    cartGoods: []
+    //cartGoods: []
   }),
   provide () {
     return {
-      cartGoods: this.cartGoods,
+      //cartGoods: this.cartGoods,
       goods: this.goods
     }
   },
   created () {
-    this.fetchGoods().then(() => {})
+    this.fetchGoods().then(() => {}).catch(()=>{console.log('Error connection')})
   },
   methods: {
     addToCart(e) {
-      let thisGoodIsNotExist = false
-      if (this.cartGoods.length > 0) {
-        for (let i = 0; i < this.cartGoods.length; i++) {
-          if (this.cartGoods[i].id_product === e.target.getAttribute('data-id')) {
-            this.cartGoods[i].value += 1
-            i = this.cartGoods.length + 1
-            thisGoodIsNotExist = true
-          }
-        }
-      }
-      if (!thisGoodIsNotExist) {
-        const choosenItem = {
-          id_product: e.target.getAttribute('data-id'),
-          product_name: e.target.getAttribute('data-product-name'),
-          price: e.target.getAttribute('data-price'),
-          value: 1
-        }
-        this.cartGoods.push(choosenItem)
-      }
+
+      const item = { id_product: e.target.getAttribute('data-id')};
+      axios.post(this.url, item)
+          .then(response => console.log('Item was added to cart'))
+          .catch(error => {
+            console.error("There was an error: ", error);
+          });
     },
     async fetchGoods()
 {
-  const responce = await fetch(`${this.url}/catalogData.json`);
+  const responce = await fetch(`${this.url}/catalogData`);
   if (responce.ok) {
     const catalogItems = await responce.json();
     this.goods = catalogItems;
-    return catalogItems;
   } else {
     console.log("Ошибка при соединении с сервером");
   }
@@ -197,6 +204,7 @@ Vue.component('app-main', {
   }
 });
 
+//==================================================================
 
 const app = new Vue({
   el: '#app',
@@ -204,6 +212,10 @@ const app = new Vue({
 
   },
 });
+
+//==============================================================
+
+
 
 
 

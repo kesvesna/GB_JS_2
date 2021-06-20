@@ -1,0 +1,7 @@
+[{"id_product": 15, "product_name":"Гранатовое вино","price":2000,
+  "value": 3
+},{ "id_product": 5,"product_name":"Колонки","price":130,
+  "value": 2
+},{"id_product": 9,"product_name":"Ноутбук","price":400,
+  "value": 1
+}]
