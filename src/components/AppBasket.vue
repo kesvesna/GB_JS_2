@@ -1,4 +1,5 @@
 <template>
+    <section>
     <section class="breadcrumbs content__centering">
         <h3 class="breadcrumbs__title">
             SHOPPING CART
@@ -55,6 +56,7 @@
 
 
 
+    </section>
     </section>
 </template>
 

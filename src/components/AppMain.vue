@@ -1,5 +1,5 @@
 <template>
-
+<section>
   <section class="promo content__centering">
     <div class="promo__image">
       <img src="images/big_picture_man.png" alt="Man photo" class="promo__photo">
@@ -101,6 +101,7 @@
         tion with extensive models.</p>
     </article>
   </section>
+</section>
 </template>
 
 <script>
