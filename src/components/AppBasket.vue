@@ -1,5 +1,9 @@
 <template>
-<!--    <h2 v-if="cartGoods.length < 1">Корзина пустая</h2>-->
+    <section class="breadcrumbs content__centering">
+        <h3 class="breadcrumbs__title">
+            SHOPPING CART
+        </h3>
+    </section>
     <section class="cart content__centering">
 
         <div class="product__cards">
@@ -13,7 +17,7 @@
             <p class="card__info">Price: <span class="price">${{ good.product_price }}</span></p>
             <p class="card__info">Color: <span class="color">Red</span></p>
             <p class="card__info">Size: <span class="size">Xl</span></p>
-            <p class="card__info">Quantity: <input class="quantity" type="number" :placeholder="2"></p>
+            <p class="card__info">Quantity: <input class="quantity" type="number" :placeholder="good.value"></p>
         </div>
         <span class="close__button" @click="removeFromCart(good.id_product)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                          xmlns="http://www.w3.org/2000/svg">

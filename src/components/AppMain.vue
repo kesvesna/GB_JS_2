@@ -1,5 +1,51 @@
 <template>
 
+  <section class="promo content__centering">
+    <div class="promo__image">
+      <img src="images/big_picture_man.png" alt="Man photo" class="promo__photo">
+    </div>
+    <div class="promo__text">
+      <div class="promo__content">
+        <h1 class="promo__h1">THE BRAND</h1>
+        <h2 class="promo__h2">OF LUXERIOS <span class="promo__h2_select">FASHION</span></h2>
+      </div>
+    </div>
+  </section>
+  <div class="offer content__centering">
+    <div class="offer__pictures__1">
+      <div class="offer__picture__block__1">
+        <div class="offer__text__block__1">
+          <p class="offer__text__1">30% OFF</p>
+          <p class="offer__text__2">FOR WOMEN</p>
+        </div>
+      </div>
+      <div class="offer__picture__block__2">
+        <div class="offer__text__block__1">
+          <p class="offer__text__1">HOT DEAL</p>
+          <p class="offer__text__2">FOR MEN</p>
+        </div>
+      </div>
+      <div class="offer__picture__block__3">
+        <div class="offer__text__block__1">
+          <p class="offer__text__1">NEW ARRIVALS</p>
+          <p class="offer__text__2">FOR KIDS</p>
+        </div>
+      </div>
+    </div>
+    <div class="offer__picture__2">
+      <div class="offer__text__block">
+        <p class="offer__text__1">LUXIROUS & TRENDY</p>
+        <p class="offer__text__2">ACCESORIES</p>
+      </div>
+    </div>
+  </div>
+
+  <section class="products content__centering">
+    <div class="top__text">
+      <p class="products__top__text__1">Fetured Items</p>
+      <p class="products__top__text__2">Shop for items based on what we featured in this week</p>
+    </div>
+    <div class="products__cards">
   <div class="product__card" v-for="good in goods" :key="good.id_product">
     <a class="product__card__link" href="#">
       <img class="product__card__image" :src="good.product_image" alt="product_card_1">
@@ -25,6 +71,36 @@
       Add to Cart
     </a>
   </div>
+    </div>
+    <div class="browse__all__button">
+      <a class="browse__all__product" href="#">
+        <span>Browse All Product</span>
+      </a>
+    </div>
+  </section>
+  <section class="sale content__centering">
+    <article class="sale_item">
+      <img src="images/sale_img_1.svg" alt="" class="sale_img">
+      <h3 class="sale_title">Free Delivery</h3>
+      <p class="sale_text">Worldwide delivery on all. Authorit tively morph next-generation
+        innov
+        tion with extensive models.</p>
+    </article>
+    <article class="sale_item">
+      <img src="images/sale_img_2.svg" alt="" class="sale_img">
+      <h3 class="sale_title">Sales & discounts</h3>
+      <p class="sale_text">Worldwide delivery on all. Authorit tively morph next-generation
+        innov
+        tion with extensive models.</p>
+    </article>
+    <article class="sale_item">
+      <img src="images/sale_img_3.svg" alt="" class="sale_img">
+      <h3 class="sale_title">Quality assurance</h3>
+      <p class="sale_text">Worldwide delivery on all. Authorit tively morph next-generation
+        innov
+        tion with extensive models.</p>
+    </article>
+  </section>
 </template>
 
 <script>

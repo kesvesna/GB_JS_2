@@ -1,8 +1,6 @@
 <template>
     <AppBasket ref="addToCart"/>
 </template>
-
-
 <script>
   // @ is an alias to /src
   import AppBasket from "../components/AppBasket";

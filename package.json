@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "start vue-cli-service serve | start node ./src/server.js",
-    "build": "vue-cli-service build",
+    "build": "webpack",
     "lint": "vue-cli-service lint",
     "test": "jasmine"
   },
@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "jasmine": "^3.7.0",
     "vue": "^3.0.0",
+    "vue-loader": "^15.9.7",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0",
     "webpack": "^4.46.0",
