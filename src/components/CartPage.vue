@@ -1,5 +1,5 @@
 <template>
-   <div>
+    <div>
         <section class="breadcrumbs content__centering">
             <h3 class="breadcrumbs__title">
                 Корзина
@@ -9,22 +9,25 @@
 
             <div class="product__cards">
                 <h2 v-if="cartGoods.length < 1">Корзина пустая</h2>
-                <div class="product__card" v-for="good in cartGoods" :key="good.id_product">
+                <div class="product__card" v-for="good in cartGoods['contents']" :key="good.id_product">
                     <div class="product__card__picture">
                         <img :src="good.product_image" alt='product_picture'>
                     </div>
                     <div class="product__card__info">
                         <p class="product__card__info__title">{{ good.product_name }}</p>
-                        <p class="card__info">Price: <span class="price">${{ good.product_price }}</span></p>
+                        <p class="card__info">Price: <span class="price">${{ good.price }}</span></p>
                         <p class="card__info">Color: <span class="color">Red</span></p>
                         <p class="card__info">Size: <span class="size">Xl</span></p>
-                        <p class="card__info">Quantity: <input class="quantity" type="number" :placeholder="good.value"></p>
+                        <p class="card__info">Quantity: <input class="quantity" type="number"
+                                                               :placeholder="good.quantity"></p>
                     </div>
-                    <span class="close__button" @click="removeFromCart(good.id_product)"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                    <span class="close__button" @click="removeFromCart(good.id_product)"><svg width="18" height="18"
+                                                                                              viewBox="0 0 18 18"
+                                                                                              fill="none"
                                                                                               xmlns="http://www.w3.org/2000/svg">
                             <path
                                     d="M11.2453 9L17.5302 2.71516C17.8285 2.41741 17.9962 2.01336 17.9966 1.59191C17.997 1.17045 17.8299 0.76611 17.5322 0.467833C17.2344 0.169555 16.8304 0.00177586 16.4089 0.00140366C15.9875 0.00103146 15.5831 0.168097 15.2848 0.465848L9 6.75069L2.71516 0.465848C2.41688 0.167571 2.01233 0 1.5905 0C1.16868 0 0.764125 0.167571 0.465848 0.465848C0.167571 0.764125 0 1.16868 0 1.5905C0 2.01233 0.167571 2.41688 0.465848 2.71516L6.75069 9L0.465848 15.2848C0.167571 15.5831 0 15.9877 0 16.4095C0 16.8313 0.167571 17.2359 0.465848 17.5342C0.764125 17.8324 1.16868 18 1.5905 18C2.01233 18 2.41688 17.8324 2.71516 17.5342L9 11.2493L15.2848 17.5342C15.5831 17.8324 15.9877 18 16.4095 18C16.8313 18 17.2359 17.8324 17.5342 17.5342C17.8324 17.2359 18 16.8313 18 16.4095C18 15.9877 17.8324 15.5831 17.5342 15.2848L11.2453 9Z"
-                                    fill="#575757" />
+                                    fill="#575757"/>
                         </svg>
                     </span>
                 </div>
@@ -48,17 +51,18 @@
                 </form>
                 <form class="checkout">
                     <p class="sub__total">SUB TOTAL <span class="sub__total__price">$900</span></p>
-                    <p class="grand__total">GRAND TOTAL <span class="grand__total__price">$900</span> </p>
+                    <p class="grand__total">GRAND TOTAL <span class="grand__total__price">$900</span></p>
                     <hr class="divider">
                     <button class="proceed__button" type="submit">PROCEED TO CHECKOUT</button>
                 </form>
             </div>
         </section>
-   </div>
+    </div>
 </template>
 
 <script>
     import axios from 'axios';
+
     export default {
         name: "AppBasket",
         data: () => ({
@@ -66,37 +70,46 @@
             title: 'Корзина',
             cartGoods: []
         }),
-        created () {
-            this.fetchCartGoods().then(() => {}).catch(()=>{console.log('Error connection')})
+        created() {
+            this.fetchCartGoods().then(() => {
+            }).catch(() => {
+                console.log('Error connection')
+            })
         },
         methods: {
-            removeFromCart(e) {
+            removeFromCart() {
 
-                const item = { id_product: parseInt(e)};
+                const item = {
+                    id_product: 123
+                    // id_product: parseInt(e)
+                };
                 axios.post(`${this.url}/deleteFromBasket.json`, item)
-                    .then(response =>  this.cartGoods = response.data)
+                    .then(response => {
+                            console.log(response.data)
+                        }
+                        //this.cartGoods = response.data
+                    )
                     .catch(error => {
                         console.error("There was an error: ", error);
                     });
             },
             minusCartGood: function (key) {
-                const item = { id_product: parseInt(key)};
+                const item = {id_product: parseInt(key)};
                 axios.post(`${this.url}/minusOne`, item)
-                    .then(response =>  this.cartGoods = response.data)
+                    .then(response => this.cartGoods = response.data)
                     .catch(error => {
                         console.error("There was an error: ", error);
                     });
             },
             plusCartGood: function (key) {
-                const item = { id_product: parseInt(key)};
+                const item = {id_product: parseInt(key)};
                 axios.post(`${this.url}/addOne`, item)
-                    .then(response =>  this.cartGoods = response.data)
+                    .then(response => this.cartGoods = response.data)
                     .catch(error => {
                         console.error("There was an error: ", error);
                     });
             },
-            async fetchCartGoods()
-            {
+            async fetchCartGoods() {
                 const responce = await fetch(`${this.url}/getBasket.json`);
                 if (responce.ok) {
                     this.cartGoods = await responce.json();
@@ -745,6 +758,7 @@
             padding-left: calc(50% - 368px);
             padding-right: calc(50% - 368px);
         }
+
         .cart {
             -webkit-box-orient: vertical;
             -webkit-box-direction: normal;
@@ -755,10 +769,12 @@
             justify-content: center;
             padding: 0;
         }
+
         .product__card {
             margin-right: 0;
             width: 734px;
         }
+
         .buttons__block {
             width: 100%;
             display: -webkit-box;
@@ -768,6 +784,7 @@
             -ms-flex-pack: justify;
             justify-content: space-between;
         }
+
         .info__block {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -782,13 +799,16 @@
             width: 100%;
             margin-bottom: 128px;
         }
+
         .shipping,
         .checkout {
             width: 360px;
         }
+
         .shipping input {
             border: 1px solid;
         }
+
         .subscribe {
             -webkit-box-orient: vertical;
             -webkit-box-direction: normal;
@@ -798,9 +818,11 @@
             -ms-flex-align: center;
             align-items: center;
         }
+
         .subscribe__block__1 {
             margin-top: 48px;
         }
+
         .subscribe__block__2 {
             margin-top: 48px;
             margin-bottom: 140px;
@@ -811,13 +833,16 @@
         .wrapper {
             min-height: calc(100vh - 800px);
         }
+
         .footer {
             min-height: 800px;
         }
+
         .content__centering {
             padding-left: calc(50% - 188px);
             padding-right: calc(50% - 188px);
         }
+
         .breadcrumbs {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -826,24 +851,29 @@
             -ms-flex-pack: center;
             justify-content: center;
         }
+
         .cart {
             margin-top: 35px;
             margin-bottom: 220px;
         }
+
         .product__card {
             width: 358px;
             height: 188px;
             margin-bottom: 32px;
             margin-right: 0;
         }
+
         .product__card__info {
             margin-left: 17px;
             max-width: 135px;
         }
+
         .product__card__picture img {
             width: 143px;
             height: 188px;
         }
+
         .product__card__info__title {
             font-family: Lato;
             font-style: normal;
@@ -854,6 +884,7 @@
             margin-bottom: 25px;
             margin-top: 13px;
         }
+
         .card__info {
             font-family: Lato;
             font-style: normal;
@@ -863,6 +894,7 @@
             color: #575757;
             margin-bottom: 4px;
         }
+
         .quantity {
             width: 24px;
             max-height: 15px;
@@ -871,18 +903,22 @@
             color: #656565;
             text-align: center;
         }
+
         .close__button svg {
             width: 11px;
             height: 11px;
         }
+
         .close__button {
             margin-top: 8px;
             margin-right: 12px;
         }
+
         .buttons__block {
             margin-top: 30px;
             margin-bottom: 48px;
         }
+
         .buttons__block button {
             width: 175px;
             height: 33px;
@@ -895,6 +931,7 @@
             text-align: center;
             padding: 0;
         }
+
         .info__block {
             -webkit-box-orient: vertical;
             -webkit-box-direction: normal;
@@ -902,10 +939,12 @@
             flex-direction: column;
             padding: 0;
         }
+
         .shipping {
             padding: 0;
             margin-bottom: 48px;
         }
+
         .subscribe__block__1 {
             margin-top: 64px;
             font-family: Lato;
@@ -916,11 +955,13 @@
             text-align: center;
             color: #222224;
         }
+
         .subscribe__block__2 {
             margin-top: 59px;
             margin-bottom: 109px;
             max-width: 341px;
         }
+
         .subscribe__form form {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -928,12 +969,15 @@
             -ms-flex-wrap: nowrap;
             flex-wrap: nowrap;
         }
+
         .subscribe__input {
             max-width: 201px;
         }
+
         .subscribe__button {
             max-width: 96px;
         }
+
         .subscribe__block__2__p__2 {
             font-family: Lato;
             font-style: normal;
@@ -943,6 +987,7 @@
             text-align: center;
             color: #222224;
         }
+
         .footer__info {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -955,5 +1000,6 @@
             padding-bottom: 9px;
         }
     }
+
     /*# sourceMappingURL=cart.css.map */
 </style>

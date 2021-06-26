@@ -4,6 +4,7 @@
 
 <script>
     import MainPage from "../components/MainPage";
+
     export default {
         name: "main-page",
         components: {

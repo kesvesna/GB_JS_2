@@ -4,6 +4,7 @@
 
 <script>
     import SearchPage from "../components/SearchPage";
+
     export default {
         name: "search-page",
         components: {
