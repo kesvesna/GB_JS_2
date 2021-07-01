@@ -1,0 +1,44 @@
+[
+  {
+    "id_product": 1,
+    "product_name": "Куртка мужская",
+    "price": 10,
+    "product_image": "images/product_card_1.png",
+    "value": 1
+  },
+  {
+    "id_product": 3,
+    "product_name": "Туфли женские",
+    "price": 20,
+    "product_image": "images/product_card_2.png",
+    "value": 1
+  },
+  {
+    "id_product": 5,
+    "product_name": "Шорты мужские",
+    "price": 13,
+    "product_image": "images/product_card_3.png",
+    "value": 1
+  },
+  {
+    "id_product": 7,
+    "product_name": "Рубашка мужская",
+    "price": 15,
+    "product_image": "images/product_card_4.png",
+    "value": 1
+  },
+  {
+    "id_product": 9,
+    "product_name": "Пиджак женский",
+    "price": 40,
+    "product_image": "images/product_card_5.png",
+    "value": 1
+  },
+  {
+    "id_product": 11,
+    "product_name": "Рубашка женская",
+    "price": 20,
+    "product_image": "images/product_card_6.png",
+    "value": 1
+  }
+]
